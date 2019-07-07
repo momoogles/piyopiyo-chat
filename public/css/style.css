@@ -1,0 +1,85 @@
+@charset "UTF-8j";
+
+body {
+  color: aqua;
+  background-color: black;
+}
+
+main {
+  width: 700px;
+  margin: 0 auto;
+}
+
+#form_area {
+  display: flex;
+  flex-direction: row;
+}
+
+input {
+  width: 94px;
+  height: 24px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+input:focus {
+  outline: none;
+}
+
+input:focus-visible {
+  outline: 2px solid blueviolet;
+}
+
+#input {
+  margin-right: 20px;
+}
+
+button {
+  width: 50px;
+  height: 30px;
+  margin: 5px;
+  border-radius: 10px;
+  color: black;
+  background-color: aqua;
+}
+
+button:hover {
+  filter: brightness(80%);
+}
+
+button:active {
+  filter: blur(3px);
+}
+
+.log {
+  display: flex;
+  width: 700px;
+  flex-direction: row;
+}
+
+.username {
+  display: flex;
+  width: 100px;
+  height: 40px;
+  margin: 10px 10px 0 0;
+  padding: 10px;
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffffb3;
+  color: black;
+}
+
+.text {
+  display: flex;
+  width: 400px;
+  height: 40px;
+  margin: 10px 10px 0 0;
+  padding: 10px;
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+  align-items: center;
+  background-color: #ffffffb3;
+  color: black;
+}
