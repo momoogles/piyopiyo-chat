@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 
 app.listen(3000);
 
+//ここからあれ
 const messages = [];
 
 app.get("/messages", (req, res) => {
@@ -22,6 +23,7 @@ app.post("/messages", (req, res) => {
   const username_temp = req.body.username;
   const username = (typeof username_temp !== "undefined" && username_temp.trim()) || "名無しさん";
   const text = req.body.text;
+  const time = req.body.time;
 
   if (!text) {
     res.send({
@@ -32,7 +34,8 @@ app.post("/messages", (req, res) => {
 
   const message = {
     username,
-    text
+    text,
+    time
   };
 
   messages.push(message);

@@ -19,7 +19,7 @@ const makeForm = () => {
   button_reload.setAttribute("id", "reload");
   button_reload.textContent = "↻";
   button_reload.addEventListener("click", () => {
-    reload();
+    getTimeline();
   });
 
   NODE.INPUT.appendChild(input_username);
@@ -28,10 +28,9 @@ const makeForm = () => {
   NODE.BUTTON.appendChild(button_reload);
 };
 
-const makeDiv = messages_info => {
+const makeLog = messages_info => {
   NODE.LOG_AREA.innerHTML = "";
   messages_info.reverse().forEach(message_info => {
-    console.log(message_info);
     const div_username = document.createElement("div");
     div_username.setAttribute("class", "username");
     div_username.textContent = message_info.username;
@@ -40,10 +39,15 @@ const makeDiv = messages_info => {
     div_text.setAttribute("class", "text");
     div_text.textContent = message_info.text;
 
+    const div_time = document.createElement("div");
+    div_time.setAttribute("class", "time");
+    div_time.textContent = message_info.time;
+
     const div_log = document.createElement("div");
     div_log.setAttribute("class", "log");
     div_log.appendChild(div_username);
     div_log.appendChild(div_text);
+    div_log.appendChild(div_time);
 
     NODE.LOG_AREA.appendChild(div_log);
   });
@@ -55,8 +59,35 @@ const getTimeline = () => {
       return res.json();
     })
     .then(messages_info => {
-      makeDiv(messages_info);
+      makeLog(messages_info);
     });
+};
+
+const getTime = () => {
+  const now = new Date();
+
+  const year = now.getFullYear();
+
+  const month = now.getMonth() + 1;
+
+  const day_key = now.getDay();
+  const day_array = ["日", "月", "火", "水", "木", "金", "土"];
+  const day = day_array[day_key];
+
+  const date = now.getDate();
+
+  const hours_str = now.getHours().toString(10);
+  const hours = hours_str.padStart(2, "0");
+
+  const minutes_str = now.getMinutes().toString(10);
+  const minutes = minutes_str.padStart(2, "0");
+
+  const seconds_str = now.getSeconds().toString(10);
+  const seconds = seconds_str.padStart(2, "0");
+
+  const time = `${year}/${month}/${date}(${day}) ${hours}:${minutes}:${seconds}`;
+
+  return time;
 };
 
 //ここから初期処理
@@ -65,10 +96,10 @@ getTimeline();
 
 NODE.USERNAME = document.getElementById("username");
 NODE.TEXT = document.getElementById("text");
+NODE.TIME = document.getElementById("time");
 
 //ここからクリック処理
 const send = () => {
-  console.log("Hello world");
   fetch("/messages", {
     method: "POST",
     headers: {
@@ -76,14 +107,14 @@ const send = () => {
     },
     body: JSON.stringify({
       username: NODE.USERNAME.value,
-      text: NODE.TEXT.value
+      text: NODE.TEXT.value,
+      time: getTime()
     })
   })
     .then(res => {
       return res.json();
     })
     .then(json => {
-      console.log(json);
       NODE.USERNAME.value = null;
       NODE.TEXT.value = null;
       getTimeline();
