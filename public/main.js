@@ -91,6 +91,7 @@ const getTime = () => {
 };
 
 //ここから初期処理
+
 makeForm();
 getTimeline();
 
@@ -98,25 +99,40 @@ NODE.USERNAME = document.getElementById("username");
 NODE.TEXT = document.getElementById("text");
 NODE.TIME = document.getElementById("time");
 
+const socket = io()
+
+socket.on("messages", messages => {
+  makeLog(messages)
+})
+
 //ここからクリック処理
+
 const send = () => {
-  fetch("/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    },
-    body: JSON.stringify({
-      username: NODE.USERNAME.value,
-      text: NODE.TEXT.value,
-      time: getTime()
-    })
-  })
-    .then(res => {
-      return res.json();
-    })
-    .then(json => {
-      NODE.USERNAME.value = null;
-      NODE.TEXT.value = null;
-      getTimeline();
-    });
+  // fetch("/messages", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json; charset=utf-8"
+  //   },
+  //   body: JSON.stringify({
+  //     username: NODE.USERNAME.value,
+  //     text: NODE.TEXT.value,
+  //     time: getTime()
+  //   })
+  // })
+  //   .then(res => {
+  //     return res.json();
+  //   })
+  //   .then(res => {
+  //     NODE.USERNAME.value = null;
+  //     NODE.TEXT.value = null;
+  //     getTimeline();
+  //   });
+
+  const msg_info = {
+    username: NODE.USERNAME.value,
+    text: NODE.TEXT.value,
+    time: getTime()
+  }
+
+  socket.emit("messages", msg_info)
 };

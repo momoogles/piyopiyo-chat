@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
+const server = require("http").createServer(app);
+
 app.use(express.static("public"));
 app.use(
   bodyParser.urlencoded({
@@ -10,37 +12,47 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.listen(3000);
+server.listen(3000);
 
-//ここからあれ
+//express
 const messages = [];
 
 app.get("/messages", (req, res) => {
   res.send(messages);
 });
 
-app.post("/messages", (req, res) => {
-  const username_temp = req.body.username;
-  const username = (typeof username_temp !== "undefined" && username_temp.trim()) || "名無しさん";
-  const text = req.body.text;
-  const time = req.body.time;
+// app.post("/messages", (req, res) => {
+//   const username_temp = req.body.username;
+//   const username = (typeof username_temp !== "undefined" && username_temp.trim()) || "名無しさん";
+//   const text = req.body.text;
+//   const time = req.body.time;
 
-  if (!text) {
-    res.send({
-      state: false
-    });
-    return;
-  }
+//   if (!text) {
+//     res.send({
+//       state: false
+//     });
+//     return;
+//   }
 
-  const message = {
-    username,
-    text,
-    time
-  };
+//   const message = {
+//     username,
+//     text,
+//     time
+//   };
 
-  messages.push(message);
+//   messages.push(message);
 
-  res.send({
-    state: true
-  });
-});
+//   res.send({
+//     state: true
+//   });
+// });
+
+const io = require("socket.io").listen(server)
+
+io.on("connection", socket => {
+  socket.on("messages", msg_info => {
+    messages.push(msg_info)
+    console.log(messages)
+    io.emit("messages", messages)
+  })
+})
